@@ -1,111 +1,106 @@
-# Flower Classification using CNN
-Model deep learning untuk klasifikasi 5 jenis bunga menggunakan arsitektur CNN kustom dengan TensorFlow/Keras.
+# 🌸 Flower Classification using Custom CNN
+
+Repositori ini berisi implementasi model *Deep Learning* untuk klasifikasi 5 jenis bunga menggunakan arsitektur **Convolutional Neural Network (CNN)** kustom berbasis **TensorFlow/Keras**. Model dirancang secara efisien untuk menangani dataset terbatas dengan performa tinggi.
 
 ---
 
-## Struktur
-```
-├── saved_model/
+## 📂 Struktur Proyek
+```text
+├── saved_model/          # Model dalam format TensorFlow SavedModel (.pb)
 │   ├── saved_model.pb
 │   └── variables/
-│
-├── tflite/
+├── tflite/               # Model teroptimasi untuk Mobile & IoT
 │   ├── model.tflite
 │   └── label.txt
-│
-├── tfjs_model/
+├── tfjs_model/           # Model untuk deployment di Browser (JS)
 │   ├── model.json
 │   └── group1-shard1of1.bin
-│
-├── notebook.ipynb
-├── requirements.txt
-└── README.md
+├── notebook.ipynb        # Eksperimen dan proses training
+├── requirements.txt      # Daftar dependensi library
+└── README.md             # Dokumentasi proyek
+
 ```
 
 ---
 
-## Dataset
-Dataset yang digunakan adalah **Custom Flower Dataset: 5-Class Image Dataset** dari Kaggle (https://www.kaggle.com/datasets/kausthubkannan/5-flower-types-classification-dataset).
+## 📊 Dataset
 
-Kelas:
-- Rose
-- Marigold
-- Petunia
-- Hibiscus
-- Chrysanthemum
+Dataset yang digunakan berasal dari Kaggle: **[Custom Flower Dataset: 5-Class Image Dataset](https://www.kaggle.com/datasets/kausthubkannan/5-flower-types-classification-dataset)**.
 
-Setiap gambar di-resize menjadi **224 × 224** untuk input.
+**Daftar Kelas:**
 
----
+* 🌹 **Rose**
+* 🌼 **Marigold**
+* 🌸 **Petunia**
+* 🌺 **Hibiscus**
+* 🌻 **Chrysanthemum**
 
-## Model
-
-Model dirancang agar ringan dan tidak overfitting, mengingat jumlah data per kelas terbatas (~200 gambar/class).
-
-**Struktur:**
-- Block 1: Conv2D(32) → BatchNorm → ReLU → MaxPool → Dropout(0.15)
-- Block 2: Conv2D(64) → BatchNorm → ReLU → MaxPool → Dropout(0.20)
-- Block 3: Conv2D(128) → BatchNorm → ReLU → MaxPool → Dropout(0.25)
-- Block 4: Conv2D(256) → BatchNorm → ReLU → MaxPool → Dropout(0.30)
-- GlobalAveragePooling2D
-- Dense(128) + BatchNorm + Dropout(0.4)
-- Dense(5, Softmax)
-
-**Callbacks:**
-- ReduceLROnPlateau  
-- EarlyStopping  
+> **Preprocessing:** Semua gambar di-resize menjadi **224 × 224** piksel untuk menjaga konsistensi input model.
 
 ---
 
-## Training Configuration
+## 🏗️ Arsitektur Model
+
+Model dikembangkan dengan fokus pada efisiensi (ringan) dan pencegahan *overfitting* menggunakan teknik regularisasi, mengingat rata-rata jumlah data hanya ~200 gambar per kelas.
+
+**Detail Arsitektur:**
+
+* **Block 1-4:** `Conv2D` → `Batch Normalization` → `ReLU` → `MaxPooling` → `Dropout` (0.15 - 0.30).
+* **Global Layer:** `GlobalAveragePooling2D` (mengurangi jumlah parameter secara signifikan).
+* **Classifier:** `Dense(128)` dengan `BatchNorm` & `Dropout(0.4)`.
+* **Output:** `Dense(5, Softmax)` untuk klasifikasi multi-kelas.
+
+**Mekanisme Optimasi (Callbacks):**
+
+* 📉 `ReduceLROnPlateau`: Menurunkan *learning rate* saat performa mulai stagnan.
+* 🛑 `EarlyStopping`: Menghentikan training otomatis jika tidak ada peningkatan untuk mencegah *overfitting*.
+
+---
+
+## ⚙️ Konfigurasi Training
 
 | Parameter | Nilai |
-|----------|-------|
-| Optimizer | Adam |
-| Loss | Sparse Categorical Crossentropy |
-| Input Shape | 224 × 224 × 3 |
-| Epochs | 20|
+| --- | --- |
+| **Optimizer** | Adam |
+| **Loss Function** | Sparse Categorical Crossentropy |
+| **Input Shape** | 224 × 224 × 3 (RGB) |
+| **Epochs** | 20 |
 
 ---
 
-## Model Exports
+## 🚀 Model Exports
 
-### SavedModel
-Tersimpan di:
+Untuk mendukung berbagai skenario deployment, model telah diekspor ke beberapa format:
 
-```
-submission/saved_model/
-```
----
-
-## TensorFlow Lite (TFLite)
-Tersimpan di:
-
-```
-submission/tflite/model.tflite
-submission/tflite/label.txt
-```
----
-
-### TensorFlow.js
-Tersimpan di:
-
-```
-submission/tfjs_model/
-```
+1. **SavedModel:** Terletak di `submission/saved_model/` (untuk penggunaan server/Python).
+2. **TFLite:** Terletak di `submission/tflite/` (untuk aplikasi Android/iOS atau Edge Devices).
+3. **TFJS:** Terletak di `submission/tfjs_model/` (untuk integrasi di aplikasi web).
 
 ---
 
-## Requirements
+## 🛠️ Instalasi & Penggunaan
 
-Install dependencies:
+1. **Clone Repositori:**
+```bash
+git clone [https://github.com/username/flower-classification.git](https://github.com/username/flower-classification.git)
+cd flower-classification
 
 ```
+
+
+2. **Install Dependensi:**
+```bash
 pip install -r requirements.txt
+
 ```
+
+
 
 ---
 
-## Summary
+## 🏆 Ringkasan Hasil
 
-Proyek ini memiliki akurasi pada training mencapai **97-98**% dengan akurasi pada test set 98%
+Model menunjukkan performa yang sangat impresif:
+
+* ✅ **Akurasi Training:** 97% - 98%
+* ✅ **Akurasi Test Set:** 98%
